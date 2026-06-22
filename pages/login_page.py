@@ -5,13 +5,12 @@ class LoginPage:
         self.password_input = page.locator("#password")
         self.login_button = page.locator("#login-button")
 
-        self.locked_out_user = page.locator('[data-test="error"]')
+        self.error_message = page.locator('[data-test="error"]')
     
     def open(self):
         self.page.goto("/")
 
     def login(self,username,password):
-        self.open()
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.login_button.click()

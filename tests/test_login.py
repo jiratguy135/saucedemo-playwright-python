@@ -14,42 +14,48 @@ def test_valid_login_redirects_to_inventory(page):
 
 def test_locked_out_user_shows_error(page):
     login_page = LoginPage(page)
+    login_page.open()
     login_page.login("locked_out_user","secret_sauce")
     
-    expect(login_page.locked_out_user).to_contain_text("Epic sadface: Sorry, this user has been locked out.")
+    expect(login_page.error_message).to_contain_text("Epic sadface: Sorry, this user has been locked out.")
     expect(page).to_have_url("/")
     
 def test_login_with_invalid_password_shows_error(page):
     login_page = LoginPage(page)
+    login_page.open()
     login_page.login("standard_user","test")
     
-    expect(login_page.locked_out_user).to_contain_text("Epic sadface: Username and password do not match any user in this service")
+    expect(login_page.error_message).to_contain_text("Epic sadface: Username and password do not match any user in this service")
     expect(page).to_have_url("/")
 
 def test_login_with_invalid_username_shows_error(page):
     login_page = LoginPage(page)
+    login_page.open()
     login_page.login("test","secret_sauce")
     
-    expect(login_page.locked_out_user).to_contain_text("Epic sadface: Username and password do not match any user in this service")
+    expect(login_page.error_message).to_contain_text("Epic sadface: Username and password do not match any user in this service")
     expect(page).to_have_url("/")
 
 def test_login_with_empty_username_shows_required_error(page):
     login_page = LoginPage(page)
+    login_page.open()
     login_page.login("","secret_sauce")
     
-    expect(login_page.locked_out_user).to_contain_text("Epic sadface: Username is required")
+    expect(login_page.error_message).to_contain_text("Epic sadface: Username is required")
     expect(page).to_have_url("/")
 
 def test_login_with_empty_password_shows_required_error(page):
     login_page = LoginPage(page)
+    login_page.open()
     login_page.login("standard_user","")
     
-    expect(login_page.locked_out_user).to_contain_text("Epic sadface: Password is required")
+    expect(login_page.error_message).to_contain_text("Epic sadface: Password is required")
     expect(page).to_have_url("/")
 
 def test_login_with_empty_credentials_shows_error(page):
     login_page = LoginPage(page)
+    login_page.open()
     login_page.login("","")
     
-    expect(login_page.locked_out_user).to_contain_text("Epic sadface: Username is required")
+    expect(login_page.error_message).to_contain_text("Epic sadface: Username is required")
     expect(page).to_have_url("/")
