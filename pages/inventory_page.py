@@ -6,6 +6,8 @@ class InventoryPage:
         self.add_backpack_to_cart_button = page.locator('[data-test="add-to-cart-sauce-labs-backpack"]')
         self.remove_backpack_from_cart_button = page.locator('[data-test="remove-sauce-labs-backpack"]')
         self.cart_button = page.locator('[data-test="shopping-cart-link"]')
+        self.cart_badge = page.locator('[class="shopping-cart-badge]')
+
 
     def add_backpack_to_cart(self):
         self.add_backpack_to_cart_button.click()
