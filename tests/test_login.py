@@ -1,7 +1,15 @@
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
+from pages.cart_page import CartPage
+from pages.checkout_information_page import CheckoutInformationPage
+from pages.checkout_overview_page import CheckoutOverviewPage
+from pages.checkout_complete_page import CheckoutCompletePage
 from playwright.sync_api import expect
 
+def test_function_checkout(page):
+    login_page1 = CheckoutInformationPage(page)
+    login_page2 = CheckoutOverviewPage(page)
+    login_page3 = CheckoutCompletePage(page)
 
 def test_valid_login_redirects_to_inventory(page):
     login_page = LoginPage(page)
