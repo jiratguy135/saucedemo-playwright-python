@@ -17,3 +17,4 @@ class InventoryPage:
 
     def go_to_cart(self):
         self.cart_button.click()
+
