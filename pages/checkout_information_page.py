@@ -7,6 +7,7 @@ class CheckoutInformationPage:
         self.postal_code_input = page.locator('[data-test="postalCode"]')
         self.continue_button = page.locator('[data-test="continue"]')
         self.cancel_button = page.locator('[data-test="cancel"]')
+        self.information_error = page.locator('[data-test="error"]')
 
     def fill_information(self, first_name, last_name, postal_code):
         self.first_name_input.fill(first_name)
