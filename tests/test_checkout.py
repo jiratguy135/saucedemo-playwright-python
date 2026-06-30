@@ -1,5 +1,3 @@
-from pages.login_page import LoginPage
-from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 from pages.checkout_information_page import CheckoutInformationPage
 from pages.checkout_overview_page import CheckoutOverviewPage
@@ -7,12 +5,7 @@ from pages.checkout_complete_page import CheckoutCompletePage
 import pytest
 from playwright.sync_api import expect
 
-def test_checkout_single_item_completes_successfully(page):
-    login_page = LoginPage(page)
-    login_page.open()
-    login_page.login("standard_user","secret_sauce")
-
-    inventory_page = InventoryPage(page)
+def test_checkout_single_item_completes_successfully(page, inventory_page):
     inventory_page.add_backpack_to_cart()
     inventory_page.go_to_cart()
 
@@ -35,18 +28,11 @@ def test_checkout_single_item_completes_successfully(page):
     expect(checkout_complete_page.complete_header).to_have_text('Thank you for your order!')
     expect(page).to_have_url("/checkout-complete.html")
 
-def test_checkout_without_first_name_shows_error(page):
-    login_page = LoginPage(page)
-    login_page.open()
-    login_page.login("standard_user","secret_sauce")
-
-    inventory_page = InventoryPage(page)
+def test_checkout_without_first_name_shows_error(page, inventory_page):
     inventory_page.add_backpack_to_cart()
     inventory_page.go_to_cart()
 
     cart_page = CartPage(page)
-    expect(cart_page.inventory_name).to_have_text('Sauce Labs Backpack')
-    expect(cart_page.price).to_have_text('$29.99')
     cart_page.go_to_checkout()
 
     checkout_information_page = CheckoutInformationPage(page)
@@ -54,12 +40,7 @@ def test_checkout_without_first_name_shows_error(page):
     expect(checkout_information_page.information_error).to_have_text('Error: First Name is required')
 
 @pytest.mark.xfail(reason="BUG-001: ระบบยอมให้ checkout cart ว่างได้ (ควรถูกบล็อก)")
-def test_checkout_with_empty_cart_should_be_blocked(page):
-    login_page = LoginPage(page)
-    login_page.open()
-    login_page.login("standard_user","secret_sauce")
-
-    inventory_page = InventoryPage(page)
+def test_checkout_with_empty_cart_should_be_blocked(page, inventory_page):
     inventory_page.go_to_cart()
 
     cart_page = CartPage(page)

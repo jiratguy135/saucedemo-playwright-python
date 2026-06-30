@@ -1,15 +1,8 @@
-from pages.login_page import LoginPage
-from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 from playwright.sync_api import expect
 
 
-def test_added_product_appears_in_cart(page):
-    login_page = LoginPage(page)
-    login_page.open()
-    login_page.login("standard_user","secret_sauce")
-
-    inventory_page = InventoryPage(page)
+def test_added_product_appears_in_cart(page, inventory_page):
     inventory_page.add_backpack_to_cart()
     expect(inventory_page.cart_badge).to_have_text("1")
     inventory_page.go_to_cart()
