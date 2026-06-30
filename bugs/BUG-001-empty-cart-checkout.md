@@ -39,8 +39,8 @@
 "Thank you for your order!" ทั้งที่ไม่มีสินค้าในตะกร้า (URL: /checkout-complete.html)
 
 ## Evidence
-![empty cart](./evidence/bug-001-empty-cart.png)
-![checkout completed](./evidence/bug-002-empty-cart.png)
+![empty cart](./evidence/bug-001-overview.png)
+![checkout completed](./evidence/bug-001-complete.png)
 
 ## Notes
 พบระหว่างทำ exploratory testing ของ checkout flow (edge case: cart ว่าง)
