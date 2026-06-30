@@ -4,6 +4,7 @@ from pages.cart_page import CartPage
 from pages.checkout_information_page import CheckoutInformationPage
 from pages.checkout_overview_page import CheckoutOverviewPage
 from pages.checkout_complete_page import CheckoutCompletePage
+import pytest
 from playwright.sync_api import expect
 
 def test_checkout_single_item_completes_successfully(page):
@@ -52,7 +53,8 @@ def test_checkout_without_first_name_shows_error(page):
     checkout_information_page.click_continue()
     expect(checkout_information_page.information_error).to_have_text('Error: First Name is required')
 
-def test_checkout_without_inventory(page):
+@pytest.mark.xfail(reason="BUG-001: ระบบยอมให้ checkout cart ว่างได้ (ควรถูกบล็อก)")
+def test_checkout_with_empty_cart_should_be_blocked(page):
     login_page = LoginPage(page)
     login_page.open()
     login_page.login("standard_user","secret_sauce")
@@ -69,10 +71,10 @@ def test_checkout_without_inventory(page):
 
     checkout_overview_page = CheckoutOverviewPage(page)
     expect(checkout_overview_page.total_price_tax_label).to_have_text(f'Total: ${checkout_overview_page.sum_total():.2f}')
-    page.screenshot(path="bugs/evidence/bug-001-empty-cart.png")
+    page.screenshot(path="bugs/evidence/bug-001-overview.png")
     checkout_overview_page.click_finish()
 
     checkout_complete_page = CheckoutCompletePage(page)
-    expect(checkout_complete_page.complete_header).to_have_text('Thank you for your order!')
-    expect(page).to_have_url("/checkout-complete.html")
-    page.screenshot(path="bugs/evidence/bug-002-empty-cart.png")
+    page.screenshot(path="bugs/evidence/bug-001-complete.png")
+    expect(page).not_to_have_url("/checkout-complete.html")
+    
