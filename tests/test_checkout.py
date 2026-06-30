@@ -33,3 +33,46 @@ def test_checkout_single_item_completes_successfully(page):
     checkout_complete_page = CheckoutCompletePage(page)
     expect(checkout_complete_page.complete_header).to_have_text('Thank you for your order!')
     expect(page).to_have_url("/checkout-complete.html")
+
+def test_checkout_without_first_name_shows_error(page):
+    login_page = LoginPage(page)
+    login_page.open()
+    login_page.login("standard_user","secret_sauce")
+
+    inventory_page = InventoryPage(page)
+    inventory_page.add_backpack_to_cart()
+    inventory_page.go_to_cart()
+
+    cart_page = CartPage(page)
+    expect(cart_page.inventory_name).to_have_text('Sauce Labs Backpack')
+    expect(cart_page.price).to_have_text('$29.99')
+    cart_page.go_to_checkout()
+
+    checkout_information_page = CheckoutInformationPage(page)
+    checkout_information_page.click_continue()
+    expect(checkout_information_page.information_error).to_have_text('Error: First Name is required')
+
+def test_checkout_without_inventory(page):
+    login_page = LoginPage(page)
+    login_page.open()
+    login_page.login("standard_user","secret_sauce")
+
+    inventory_page = InventoryPage(page)
+    inventory_page.go_to_cart()
+
+    cart_page = CartPage(page)
+    cart_page.go_to_checkout()
+
+    checkout_information_page = CheckoutInformationPage(page)
+    checkout_information_page.fill_information("John","Doe","12345")
+    checkout_information_page.click_continue()
+
+    checkout_overview_page = CheckoutOverviewPage(page)
+    expect(checkout_overview_page.total_price_tax_label).to_have_text(f'Total: ${checkout_overview_page.sum_total():.2f}')
+    page.screenshot(path="bugs/evidence/bug-001-empty-cart.png")
+    checkout_overview_page.click_finish()
+
+    checkout_complete_page = CheckoutCompletePage(page)
+    expect(checkout_complete_page.complete_header).to_have_text('Thank you for your order!')
+    expect(page).to_have_url("/checkout-complete.html")
+    page.screenshot(path="bugs/evidence/bug-002-empty-cart.png")
