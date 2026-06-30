@@ -7,7 +7,7 @@
 | **Priority** | High                           |
 | **Status**   | Open                           |
 | **Reported** | 2026-06-29                     |
-| **Reporter** | [Jirat Fuangfu]                       |
+| **Reporter** | Jirat Fuangfu                       |
 | **Module**   | Checkout                       |
 
 ## Summary
